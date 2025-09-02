@@ -17,3 +17,4 @@ Disallow: /admin
 Disallow: /auth
 
 Sitemap: https://njreap.com/sitemap.xml
+
