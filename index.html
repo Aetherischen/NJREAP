@@ -1,0 +1,269 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Critical Resource Preloading for Performance -->
+    <link rel="preload" href="/images/pages/bg-hero.webp" as="image" type="image/webp" fetchpriority="high">
+    <link rel="preload" href="/logo.svg" as="image" type="image/svg+xml" fetchpriority="high">
+    
+    <!-- Critical CSS for above-the-fold content -->
+    <style>
+      /* Hero Section Mobile Optimization */
+      .hero-section { 
+        min-height: 500px; 
+        background: linear-gradient(to right, rgba(77, 10, 151, 1.0) 0%, rgba(160, 68, 227, 0.8) 50%, transparent 75%); 
+      }
+      
+      @media (min-width: 640px) {
+        .hero-section { 
+          min-height: 600px; 
+        }
+      }
+      
+      /* Prevent flash of unstyled content */
+      #root { opacity: 0; transition: opacity 0.2s; }
+      #root.loaded { opacity: 1; }
+    </style>
+    
+    <!-- DNS Prefetch and Preconnect for Third-Party Resources -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//embed.tawk.to">
+    <link rel="dns-prefetch" href="//va.tawk.to">
+    <link rel="dns-prefetch" href="//www.googletagmanager.com">
+    <link rel="dns-prefetch" href="//analytics.google.com">
+    <link rel="dns-prefetch" href="//www.youtube.com">
+    <link rel="dns-prefetch" href="//www.youtube-nocookie.com">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+    
+    <!-- SEO Meta Tags -->
+    <title>NJREAP - Real Estate Appraisals & Photography | Northern & Central NJ</title>
+    <meta name="description" content="Professional real estate appraisals and photography services in Northern & Central New Jersey. USPAP compliant appraisals, aerial photography, virtual tours. Fast 5-7 day delivery with 5-star reviews." />
+    <meta name="keywords" content="real estate appraisal, property valuation, real estate photography, aerial photography, virtual tours, New Jersey appraiser, USPAP compliant, refinance appraisal, purchase appraisal, estate appraisal, PMI removal" />
+    <meta name="author" content="NJREAP LLC" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="theme-color" content="#4d0a97" />
+    <link rel="canonical" href="https://njreap.com/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://njreap.com/" />
+    <meta property="og:title" content="NJREAP - Real Estate Appraisals & Photography | Northern & Central NJ" />
+    <meta property="og:description" content="Professional real estate appraisals and photography services in Northern & Central New Jersey. USPAP compliant appraisals, aerial photography, virtual tours. Fast 5-7 day delivery with 5-star reviews." />
+    <meta property="og:image" content="https://njreap.com/images/pages/bg-hero.jpg" />
+    <meta property="og:site_name" content="NJREAP" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://njreap.com/" />
+    <meta name="twitter:title" content="NJREAP - Real Estate Appraisals & Photography | Northern & Central NJ" />
+    <meta name="twitter:description" content="Professional real estate appraisals and photography services in Northern & Central New Jersey. USPAP compliant appraisals, aerial photography, virtual tours." />
+    <meta name="twitter:image" content="https://njreap.com/images/pages/bg-hero.jpg" />
+
+    <!-- Local Business Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "NJREAP",
+      "alternateName": "New Jersey Real Estate Appraisals & Photography",
+      "description": "Professional real estate appraisals and photography services in Northern & Central New Jersey",
+      "url": "https://njreap.com",
+      "telephone": "+1-908-437-8505",
+      "email": "info@njreap.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressRegion": "New Jersey",
+        "addressCountry": "US"
+      },
+      "areaServed": [
+        {
+          "@type": "State",
+          "name": "New Jersey"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Bergen County"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Essex County"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Hudson County"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Hunterdon County"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Mercer County"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Middlesex County"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Monmouth County"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Morris County"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Ocean County"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Somerset County"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Union County"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Warren County"
+        }
+      ],
+      "serviceArea": {
+        "@type": "GeoCircle",
+        "geoMidpoint": {
+          "@type": "GeoCoordinates",
+          "latitude": 40.7282,
+          "longitude": -74.0776
+        },
+        "geoRadius": "100000"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Real Estate Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Real Estate Appraisal",
+              "description": "USPAP compliant property valuations for purchase, refinance, estate, and PMI removal"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Professional Photography",
+              "description": "High-quality interior and exterior property photography"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Aerial Photography",
+              "description": "Drone photography providing unique perspectives and property boundaries"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Virtual Tours",
+              "description": "Immersive 360° virtual tours allowing remote viewing"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Floor Plans",
+              "description": "Detailed floor plans and layouts for property visualization"
+            }
+          }
+        ]
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5",
+        "reviewCount": "50",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "openingHours": "Mo-Fr 09:00-18:00",
+      "priceRange": "$$",
+      "paymentAccepted": "Cash, Check, Credit Card"
+    }
+    </script>
+
+    <!-- Google tag (gtag.js) - Optimized loading -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      
+      gtag('config', 'G-CVX8RHFWB1', { send_page_view: false });
+      gtag('config', 'AW-16594797036');
+      
+      // Load analytics after page interactive to reduce TBT
+      function loadAnalytics() {
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-CVX8RHFWB1';
+        document.head.appendChild(script);
+        script.onload = () => gtag('event', 'page_view');
+      }
+      
+      // Delay analytics loading to improve TTI
+      if (document.readyState === 'complete') {
+        setTimeout(loadAnalytics, 1000);
+      } else {
+        window.addEventListener('load', () => setTimeout(loadAnalytics, 1000));
+      }
+    </script>
+
+    <!-- Event snippet for Inquiry request sent via Contact form conversion page -->
+    <script>
+      function gtag_report_conversion(url) {
+        var callback = function () {
+          if (typeof(url) != 'undefined') {
+            window.location = url;
+          }
+        };
+        gtag('event', 'conversion', {
+          'send_to': 'AW-16594797036/Lt-NCMPnw9dt',
+          'event_callback': callback
+        });
+        return false;
+      }
+    </script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Remove FOUC by showing content after React loads -->
+    <script>
+      // Show content after React has mounted to prevent FOUC
+      document.addEventListener('DOMContentLoaded', () => {
+        const root = document.getElementById('root');
+        const observer = new MutationObserver(() => {
+          if (root.innerHTML.trim()) {
+            root.classList.add('loaded');
+            observer.disconnect();
+          }
+        });
+        observer.observe(root, { childList: true, subtree: true });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,92 @@
+
+project_id = "yhtyhcldtytxsgiphfhn"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+enabled = true
+port = 54322
+shadow_port = 54320
+major_version = 15
+
+[db.pooler]
+enabled = false
+port = 54329
+pool_mode = "transaction"
+default_pool_size = 20
+max_client_conn = 100
+
+[realtime]
+enabled = true
+port = 54323
+tenant_id = "realtime-dev"
+
+[studio]
+enabled = true
+port = 54324
+api_url = "http://127.0.0.1:54321"
+
+[inbucket]
+enabled = true
+port = 54325
+smtp_port = 54326
+pop3_port = 54327
+
+[storage]
+enabled = true
+port = 54326
+file_size_limit = "50MiB"
+
+[auth]
+enabled = true
+port = 54321
+site_url = "https://njreap.com"
+additional_redirect_urls = [
+  "https://njreap.com",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  "https://id-preview--d5532906-b829-495a-afb9-8c4220c9bb92.lovable.app"
+]
+jwt_expiry = 3600
+enable_anonymous_sign_ins = false
+enable_signup = true
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = false
+
+[functions.njpr-property-images]
+verify_jwt = false
+
+[functions.njpr-properties]
+verify_jwt = false
+
+[functions.get-google-reviews]
+verify_jwt = false
+
+[functions.send-contact-email]
+verify_jwt = false
+
+[functions.create-job-record]
+verify_jwt = false
+
+[functions.create-calendar-event]
+verify_jwt = false
+
+[functions.get-calendar-availability]
+verify_jwt = false
+
+[functions.create-stripe-invoice]
+verify_jwt = true
+
+[functions.check-invoice-status]
+verify_jwt = true
+
+[functions.get-analytics-data]
+verify_jwt = true
