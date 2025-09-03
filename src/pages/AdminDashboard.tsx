@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import AdminLayout from '@/components/admin/AdminLayout';
 import DashboardOverview from '@/components/admin/DashboardOverview';
 import JobsManagement from '@/components/admin/JobsManagement';
+import ListingsManagement from '@/components/admin/ListingsManagement';
 import BlogManagement from '@/components/admin/BlogManagement';
 import GalleryManagement from '@/components/admin/GalleryManagement';
 import AnalyticsDashboard from '@/components/admin/AnalyticsDashboard';
@@ -18,6 +19,8 @@ const AdminDashboard = () => {
         return <DashboardOverview />;
       case '/admin/jobs':
         return <JobsManagement />;
+      case '/admin/listings':
+        return <ListingsManagement />;
       case '/admin/blog':
         return <BlogManagement />;
       case '/admin/gallery':

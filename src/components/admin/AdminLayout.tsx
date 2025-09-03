@@ -12,21 +12,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import {
-  LayoutDashboard,
-  Briefcase,
-  BarChart3,
-  Settings,
-  LogOut,
-  Menu,
-  X,
-  Shield,
-  Bell,
-  User,
-  BookOpen,
-  Camera,
-  FileText,
-} from "lucide-react";
+import { Calendar, LayoutDashboard, Briefcase, BookOpen, Camera, BarChart3, Settings, Bell, LogOut, Globe, ChevronDown, Menu, X, MapPin, User, Shield } from 'lucide-react';
 import { useNotifications } from "@/contexts/NotificationsContext";
 import { useAuth } from "@/hooks/useAuth";
 import { useSEO } from "@/hooks/useSEO";
@@ -99,6 +85,12 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
       path: "/admin/jobs",
       icon: Briefcase,
       description: "Project Management",
+    },
+    {
+      name: "Listings",
+      path: "/admin/listings",
+      icon: MapPin,
+      description: "Property Listings",
     },
     {
       name: "Content",

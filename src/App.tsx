@@ -17,6 +17,9 @@ import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfService from "@/pages/TermsOfService";
 import ThankYou from "@/pages/ThankYou";
 import NotFound from "@/pages/NotFound";
+import PropertyShowcase from "@/pages/PropertyShowcase";
+import Showcase from "@/pages/Showcase";
+import Sitemap from "@/pages/Sitemap";
 import { NotificationsProvider } from "@/contexts/NotificationsContext";
 import { AuthProvider } from "@/hooks/useAuth";
 import "./App.css";
@@ -41,6 +44,9 @@ function App() {
           <Route path="/access-denied" element={<AccessDenied />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/showcase" element={<Showcase />} />
+          <Route path="/showcase/:slug" element={<PropertyShowcase />} />
+          <Route path="/sitemap.xml" element={<Sitemap />} />
           
           {/* Admin routes with auth */}
           <Route path="/admin/*" element={
@@ -50,6 +56,7 @@ function App() {
                   <Route path="/" element={<AdminDashboard />} />
                   <Route path="/dashboard" element={<AdminDashboard />} />
                   <Route path="/jobs" element={<AdminDashboard />} />
+                  <Route path="/listings" element={<AdminDashboard />} />
                   <Route path="/blog" element={<AdminDashboard />} />
                   <Route path="/gallery" element={<AdminDashboard />} />
                   <Route path="/analytics" element={<AdminDashboard />} />

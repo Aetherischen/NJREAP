@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
 import { useState, useEffect } from "react";
 import { GetQuoteModal } from "@/components/GetQuoteModal";
+import ShowcaseFooter from "@/components/ShowcaseFooter";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   console.log('Layout component rendering...');
@@ -12,6 +13,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+  
+  // Check if we're on a showcase page
+  const isShowcasePage = location.pathname.startsWith('/showcase/');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -117,15 +121,16 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       }} />
       
       <div className="min-h-screen flex flex-col">
-      {/* Header */}
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
-            ? "bg-white/80 backdrop-blur-md shadow-lg border-b border-white/20"
-            : "bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-200"
-        }`}
-        role="banner"
-      >
+      {/* Header - Hidden on showcase pages */}
+      {!isShowcasePage && (
+        <header
+          className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+            isScrolled
+              ? "bg-white/80 backdrop-blur-md shadow-lg border-b border-white/20"
+              : "bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-200"
+          }`}
+          role="banner"
+        >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -230,13 +235,17 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             </nav>
           )}
         </div>
-      </header>
+        </header>
+      )}
 
       {/* Main Content */}
-      <main className="flex-1 pt-16" role="main">{children}</main>
+      <main className={`flex-1 ${!isShowcasePage ? 'pt-16' : ''}`} role="main">{children}</main>
 
-      {/* Footer */}
-      <footer className="bg-white border-t border-gray-200" role="contentinfo">
+      {/* Footer - Different footer for showcase pages */}
+      {isShowcasePage ? (
+        <ShowcaseFooter />
+      ) : (
+        <footer className="bg-white border-t border-gray-200" role="contentinfo">
         <div className="container mx-auto px-4 py-12">
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
             {/* Company Info */}
@@ -484,6 +493,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           }}
         />
       </footer>
+      )}
 
       {/* Get Quote Modal */}
       <GetQuoteModal 

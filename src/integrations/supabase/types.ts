@@ -435,6 +435,147 @@ export type Database = {
         }
         Relationships: []
       }
+      property_listings: {
+        Row: {
+          acreage: number | null
+          aerial_urls: string[] | null
+          agent_email: string | null
+          agent_facebook: string | null
+          agent_headshot_url: string | null
+          agent_instagram: string | null
+          agent_linkedin: string | null
+          agent_name: string
+          agent_phone: string | null
+          agent_pinterest: string | null
+          agent_x: string | null
+          agent_youtube: string | null
+          bathrooms: number | null
+          bedrooms: number | null
+          block: string | null
+          brokerage_logo_url: string | null
+          brokerage_name: string | null
+          created_at: string
+          floorplan_image_urls: string[] | null
+          floorplan_pdf_urls: string[] | null
+          floorplan_urls: string[] | null
+          has_aerial: boolean
+          has_floorplans: boolean
+          has_matterport: boolean
+          has_photos: boolean
+          has_videos: boolean
+          id: string
+          is_public: boolean
+          lot: string | null
+          matterport_urls: string[] | null
+          photos_urls: string[] | null
+          primary_photo_url: string | null
+          property_address: string
+          property_city: string | null
+          property_state: string | null
+          property_zip: string | null
+          qual: string | null
+          slug: string | null
+          sqft: number | null
+          tax_assessment: number | null
+          tax_assessment_year: number | null
+          updated_at: string
+          video_urls: string[] | null
+          year_built: number | null
+        }
+        Insert: {
+          acreage?: number | null
+          aerial_urls?: string[] | null
+          agent_email?: string | null
+          agent_facebook?: string | null
+          agent_headshot_url?: string | null
+          agent_instagram?: string | null
+          agent_linkedin?: string | null
+          agent_name: string
+          agent_phone?: string | null
+          agent_pinterest?: string | null
+          agent_x?: string | null
+          agent_youtube?: string | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          block?: string | null
+          brokerage_logo_url?: string | null
+          brokerage_name?: string | null
+          created_at?: string
+          floorplan_image_urls?: string[] | null
+          floorplan_pdf_urls?: string[] | null
+          floorplan_urls?: string[] | null
+          has_aerial?: boolean
+          has_floorplans?: boolean
+          has_matterport?: boolean
+          has_photos?: boolean
+          has_videos?: boolean
+          id?: string
+          is_public?: boolean
+          lot?: string | null
+          matterport_urls?: string[] | null
+          photos_urls?: string[] | null
+          primary_photo_url?: string | null
+          property_address: string
+          property_city?: string | null
+          property_state?: string | null
+          property_zip?: string | null
+          qual?: string | null
+          slug?: string | null
+          sqft?: number | null
+          tax_assessment?: number | null
+          tax_assessment_year?: number | null
+          updated_at?: string
+          video_urls?: string[] | null
+          year_built?: number | null
+        }
+        Update: {
+          acreage?: number | null
+          aerial_urls?: string[] | null
+          agent_email?: string | null
+          agent_facebook?: string | null
+          agent_headshot_url?: string | null
+          agent_instagram?: string | null
+          agent_linkedin?: string | null
+          agent_name?: string
+          agent_phone?: string | null
+          agent_pinterest?: string | null
+          agent_x?: string | null
+          agent_youtube?: string | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          block?: string | null
+          brokerage_logo_url?: string | null
+          brokerage_name?: string | null
+          created_at?: string
+          floorplan_image_urls?: string[] | null
+          floorplan_pdf_urls?: string[] | null
+          floorplan_urls?: string[] | null
+          has_aerial?: boolean
+          has_floorplans?: boolean
+          has_matterport?: boolean
+          has_photos?: boolean
+          has_videos?: boolean
+          id?: string
+          is_public?: boolean
+          lot?: string | null
+          matterport_urls?: string[] | null
+          photos_urls?: string[] | null
+          primary_photo_url?: string | null
+          property_address?: string
+          property_city?: string | null
+          property_state?: string | null
+          property_zip?: string | null
+          qual?: string | null
+          slug?: string | null
+          sqft?: number | null
+          tax_assessment?: number | null
+          tax_assessment_year?: number | null
+          updated_at?: string
+          video_urls?: string[] | null
+          year_built?: number | null
+        }
+        Relationships: []
+      }
       rate_limits: {
         Row: {
           created_at: string | null
