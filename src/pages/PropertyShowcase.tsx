@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
-import { User, Building, Phone, Mail, MapPin, Play, FileText, Maximize, Camera, FileImage, Download, Eye, Facebook, Instagram, Twitter, Linkedin, Youtube, Home, Calendar, DollarSign, X } from 'lucide-react';
+import { User, Building, Phone, Mail, MapPin, Play, FileText, Maximize, Camera, FileImage, Download, Eye, Facebook, Instagram, Twitter, Linkedin, Youtube, Home, Calendar, DollarSign, X, ChevronLeft, ChevronRight, ChevronDown, Bed, Bath, Square, MousePointer2 } from 'lucide-react';
 import { useSEO } from '@/hooks/useSEO';
 import { useToast } from '@/hooks/use-toast';
 import Layout from '@/components/Layout';
@@ -55,6 +55,7 @@ type PropertyListing = {
   tax_assessment?: number | null;
   tax_assessment_year?: number | null;
   primary_photo_url?: string | null;
+  primary_photos_urls?: string[];
 };
 
 const PropertyShowcase = () => {
@@ -62,7 +63,8 @@ const PropertyShowcase = () => {
   const [property, setProperty] = useState<PropertyListing | null>(null);
   const [loading, setLoading] = useState(true);
   const [pdfPreview, setPdfPreview] = useState<{ url: string; title: string } | null>(null);
-  const [selectedPhoto, setSelectedPhoto] = useState<{ url: string; alt: string } | null>(null);
+  const [selectedPhoto, setSelectedPhoto] = useState<{ url: string; alt: string; index: number } | null>(null);
+  const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
   const { toast } = useToast();
 
   useSEO({
@@ -107,6 +109,43 @@ const PropertyShowcase = () => {
 
     fetchProperty();
   }, [slug, toast]);
+
+  // Cycle through hero images
+  useEffect(() => {
+    if (!property?.primary_photos_urls || property.primary_photos_urls.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentHeroIndex(prev => (prev + 1) % property.primary_photos_urls!.length);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [property?.primary_photos_urls]);
+
+  const getHeroImages = () => {
+    if (property?.primary_photos_urls && property.primary_photos_urls.length > 0) {
+      return property.primary_photos_urls;
+    }
+    return property?.primary_photo_url ? [property.primary_photo_url] : [];
+  };
+
+  const navigatePhoto = (direction: 'prev' | 'next') => {
+    if (!property?.photos_urls || !selectedPhoto) return;
+    
+    const currentIndex = selectedPhoto.index;
+    let newIndex;
+    
+    if (direction === 'prev') {
+      newIndex = currentIndex > 0 ? currentIndex - 1 : property.photos_urls.length - 1;
+    } else {
+      newIndex = currentIndex < property.photos_urls.length - 1 ? currentIndex + 1 : 0;
+    }
+    
+    setSelectedPhoto({
+      url: property.photos_urls[newIndex],
+      alt: `Property photo ${newIndex + 1}`,
+      index: newIndex
+    });
+  };
 
   const renderSocialMediaIcons = () => {
     if (!property) return null;
@@ -156,54 +195,60 @@ const PropertyShowcase = () => {
     return (
       <Card className="bg-background/80 backdrop-blur-md border-primary/30 shadow-2xl pointer-events-auto">
         <CardContent className="p-4">
-          <h3 className="font-semibold text-base mb-3 flex items-center gap-2">
-            <Home className="w-4 h-4 text-primary" />
+          <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
+            <Home className="w-5 h-5 text-primary" />
             Property Details
           </h3>
-          <div className="grid grid-cols-1 gap-2">
+          <div className="grid grid-cols-2 gap-3">
             {property.bedrooms && (
               <div className="flex items-center gap-2">
-                <span className="text-xs font-medium">Bedrooms:</span>
-                <span className="text-xs">{property.bedrooms}</span>
+                <Bed className="w-4 h-4 text-primary" />
+                <span className="text-sm font-medium">Bedrooms:</span>
+                <span className="text-sm">{property.bedrooms}</span>
               </div>
             )}
             {property.bathrooms && (
               <div className="flex items-center gap-2">
-                <span className="text-xs font-medium">Bathrooms:</span>
-                <span className="text-xs">{property.bathrooms}</span>
+                <Bath className="w-4 h-4 text-primary" />
+                <span className="text-sm font-medium">Bathrooms:</span>
+                <span className="text-sm">{property.bathrooms}</span>
               </div>
             )}
             {property.sqft && (
               <div className="flex items-center gap-2">
-                <span className="text-xs font-medium">Square Feet:</span>
-                <span className="text-xs">{property.sqft.toLocaleString()}</span>
+                <Square className="w-4 h-4 text-primary" />
+                <span className="text-sm font-medium">Square Feet:</span>
+                <span className="text-sm">{property.sqft.toLocaleString()}</span>
               </div>
             )}
             {property.acreage && (
               <div className="flex items-center gap-2">
-                <span className="text-xs font-medium">Acreage:</span>
-                <span className="text-xs">{property.acreage}</span>
+                <MapPin className="w-4 h-4 text-primary" />
+                <span className="text-sm font-medium">Acreage:</span>
+                <span className="text-sm">{property.acreage}</span>
               </div>
             )}
             {property.year_built && (
               <div className="flex items-center gap-2">
-                <span className="text-xs font-medium">Year Built:</span>
-                <span className="text-xs">{property.year_built}</span>
+                <Calendar className="w-4 h-4 text-primary" />
+                <span className="text-sm font-medium">Year Built:</span>
+                <span className="text-sm">{property.year_built}</span>
               </div>
             )}
             {(property.block || property.lot || property.qual) && (
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-medium">Block/Lot:</span>
-                <span className="text-xs">
+              <div className="flex items-center gap-2 col-span-2">
+                <Building className="w-4 h-4 text-primary" />
+                <span className="text-sm font-medium">Block/Lot:</span>
+                <span className="text-sm">
                   {[property.block, property.lot, property.qual].filter(Boolean).join('/')}
                 </span>
               </div>
             )}
             {property.tax_assessment && property.tax_assessment_year && (
-              <div className="flex items-center gap-2 pt-2 border-t">
-                <DollarSign className="w-3 h-3 text-primary" />
-                <span className="text-xs font-medium">Tax Assessment ({property.tax_assessment_year}):</span>
-                <span className="text-xs">${property.tax_assessment.toLocaleString()}</span>
+              <div className="flex items-center gap-2 pt-2 border-t col-span-2">
+                <DollarSign className="w-4 h-4 text-primary" />
+                <span className="text-sm font-medium">Tax Assessment ({property.tax_assessment_year}):</span>
+                <span className="text-sm">${property.tax_assessment.toLocaleString()}</span>
               </div>
             )}
           </div>
@@ -239,8 +284,8 @@ const PropertyShowcase = () => {
 
     return (
       <div className="w-full">
-        {/* Desktop Floating Navigation - No Background */}
-        <div className="hidden lg:block fixed top-24 left-1/2 transform -translate-x-1/2 z-50 opacity-10 hover:opacity-100 transition-opacity duration-300">
+        {/* Desktop Floating Navigation - More Opaque */}
+        <div className="hidden lg:block fixed top-24 left-1/2 transform -translate-x-1/2 z-50 opacity-60 hover:opacity-100 transition-opacity duration-300">
           <div className="flex flex-wrap gap-2 justify-center">
             {availableSections.map((section) => (
               <Button
@@ -417,29 +462,67 @@ const PropertyShowcase = () => {
 
         {/* Primary Photo Hero */}
         <section id="photos" className="relative w-full h-screen">
-          {property.primary_photo_url && (
+          {getHeroImages().length > 0 && (
             <div className="relative w-full h-full">
-              <img 
-                src={property.primary_photo_url} 
-                alt="Primary property photo"
-                className="w-full h-full object-cover"
-              />
+              {/* Background Images with Crossfade */}
+              {getHeroImages().map((url, index) => (
+                <div 
+                  key={index}
+                  className={`absolute inset-0 transition-opacity duration-1000 ${
+                    index === currentHeroIndex ? 'opacity-100' : 'opacity-0'
+                  }`}
+                >
+                  <img 
+                    src={url} 
+                    alt={`Property photo ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
+              
               <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/30" />
               
-              {/* Property Address Overlay */}
+              {/* Property Address Overlay - Enhanced */}
               <div className="absolute top-8 left-8 z-30 max-w-2xl">
-                <h1 className="text-4xl md:text-6xl font-bold text-white drop-shadow-2xl">
-                  {property.property_address}
-                </h1>
-                {(property.property_city || property.property_state || property.property_zip) && (
-                  <p className="text-lg md:text-2xl text-white/90 mt-2 drop-shadow-lg">
-                    {[property.property_city, property.property_state, property.property_zip]
-                      .filter(Boolean)
-                      .join(', ')
-                    }
-                  </p>
-                )}
+                <div className="bg-black/20 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+                  <h1 className="text-4xl md:text-6xl font-bold text-white drop-shadow-2xl mb-2">
+                    {property.property_address}
+                  </h1>
+                  {(property.property_city || property.property_state || property.property_zip) && (
+                    <p className="text-lg md:text-2xl text-white/90 drop-shadow-lg">
+                      {[property.property_city, property.property_state, property.property_zip]
+                        .filter(Boolean)
+                        .join(', ')
+                      }
+                    </p>
+                  )}
+                </div>
               </div>
+
+              {/* Scroll Indicator */}
+              <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30 animate-bounce">
+                <div className="bg-white/20 backdrop-blur-md rounded-full p-3 border border-white/30">
+                  <ChevronDown className="w-6 h-6 text-white" />
+                </div>
+                <p className="text-white text-sm mt-2 text-center font-medium drop-shadow-lg">
+                  Scroll to explore
+                </p>
+              </div>
+
+              {/* Hero Image Navigation */}
+              {getHeroImages().length > 1 && (
+                <div className="absolute bottom-4 right-4 z-30 flex gap-2">
+                  {getHeroImages().map((_, index) => (
+                    <button
+                      key={index}
+                      className={`w-3 h-3 rounded-full border border-white/50 transition-all ${
+                        index === currentHeroIndex ? 'bg-white' : 'bg-white/30'
+                      }`}
+                      onClick={() => setCurrentHeroIndex(index)}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </section>
@@ -460,7 +543,7 @@ const PropertyShowcase = () => {
                   <div 
                     key={index}
                     className="relative aspect-square cursor-pointer group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500"
-                    onClick={() => setSelectedPhoto({ url, alt: `Property photo ${index + 1}` })}
+                    onClick={() => setSelectedPhoto({ url, alt: `Property photo ${index + 1}`, index })}
                   >
                     <img 
                       src={url} 
@@ -669,7 +752,7 @@ const PropertyShowcase = () => {
                 <div className="mb-12">
                   <div 
                     className="relative w-full h-96 cursor-pointer group overflow-hidden rounded-2xl shadow-2xl"
-                    onClick={() => setSelectedPhoto({ url: property.aerial_urls![0], alt: 'Main aerial view' })}
+                    onClick={() => setSelectedPhoto({ url: property.aerial_urls![0], alt: 'Main aerial view', index: -1 })}
                   >
                     <img 
                       src={property.aerial_urls[0]} 
@@ -756,25 +839,72 @@ const PropertyShowcase = () => {
       <div className="min-h-screen bg-background">
         {renderMediaSection()}
 
-        {/* Photo Modal - Fixed for Floor Plans */}
+        {/* Enhanced Photo Modal */}
         {selectedPhoto && (
           <Dialog open={!!selectedPhoto} onOpenChange={() => setSelectedPhoto(null)}>
-            <DialogContent className="max-w-[98vw] max-h-[98vh] p-2 border-0 bg-black/95">
-              <div className="relative w-full h-[95vh] flex items-center justify-center">
+            <DialogContent className="max-w-[98vw] max-h-[98vh] p-0 border-0 bg-transparent">
+              <div className="relative w-full h-[95vh] flex items-center justify-center bg-white/95 backdrop-blur-sm rounded-lg">
+                {/* Close Button */}
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="absolute top-4 right-4 z-50 text-white hover:bg-white/20"
+                  className="absolute top-4 right-4 z-50 text-foreground hover:bg-background/20"
                   onClick={() => setSelectedPhoto(null)}
                 >
                   <X className="w-6 h-6" />
                 </Button>
+
+                {/* Navigation Arrows - Only for photo gallery */}
+                {property?.photos_urls && selectedPhoto.index >= 0 && (
+                  <>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="absolute left-4 top-1/2 transform -translate-y-1/2 z-50 text-foreground hover:bg-background/20"
+                      onClick={() => navigatePhoto('prev')}
+                    >
+                      <ChevronLeft className="w-8 h-8" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-4 top-1/2 transform -translate-y-1/2 z-50 text-foreground hover:bg-background/20"
+                      onClick={() => navigatePhoto('next')}
+                    >
+                      <ChevronRight className="w-8 h-8" />
+                    </Button>
+                  </>
+                )}
+
+                {/* Main Image */}
                 <img 
                   src={selectedPhoto.url} 
                   alt={selectedPhoto.alt}
-                  className="max-w-full max-h-full object-contain"
-                  style={{ maxHeight: '90vh' }}
+                  className="max-w-full max-h-[70vh] object-contain"
                 />
+
+                {/* Photo Thumbnails - Only for photo gallery */}
+                {property?.photos_urls && selectedPhoto.index >= 0 && (
+                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-50 bg-background/80 backdrop-blur-sm rounded-full p-3 max-w-[90vw] overflow-x-auto">
+                    <div className="flex gap-2">
+                      {property.photos_urls.map((url, index) => (
+                        <button
+                          key={index}
+                          className={`relative w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+                            index === selectedPhoto.index ? 'border-primary ring-2 ring-primary/30' : 'border-transparent opacity-60 hover:opacity-100'
+                          }`}
+                          onClick={() => setSelectedPhoto({ url, alt: `Property photo ${index + 1}`, index })}
+                        >
+                          <img
+                            src={url}
+                            alt={`Thumbnail ${index + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </DialogContent>
           </Dialog>
