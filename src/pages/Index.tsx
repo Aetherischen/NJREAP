@@ -3,6 +3,7 @@ import Layout from "@/components/Layout";
 import PropertySearch from "@/components/PropertySearch";
 import LazyNJCountiesMap from "@/components/LazyNJCountiesMap";
 import LazyHowToPrepareSection from "@/components/LazyHowToPrepareSection";
+import LazyShowcaseSection from "@/components/LazyShowcaseSection";
 import DeferredScripts from "@/components/DeferredScripts";
 import OptimizedHero from "@/components/OptimizedHero";
 import OptimizedTestimonials from "@/components/OptimizedTestimonials";
@@ -47,6 +48,7 @@ const Index = () => {
   
   // Intersection observers for lazy loading sections
   const { ref: videoSectionRef, hasBeenIntersecting: shouldLoadVideoSection } = useIntersectionObserver();
+  const { ref: showcaseSectionRef, hasBeenIntersecting: shouldLoadShowcaseSection } = useIntersectionObserver();
   const { ref: testimonialsSectionRef, hasBeenIntersecting: shouldLoadTestimonials } = useIntersectionObserver();
 
   // SEO optimization
@@ -175,14 +177,19 @@ const Index = () => {
   return (
     <Layout>
       {/* Hero Section - Optimized for performance */}
-      <OptimizedHero ref={heroRef} onGetQuote={handleGetQuote} propertySearchRef={propertySearchRef} />
+      <OptimizedHero ref={heroRef} onGetQuote={handleGetQuote} />
 
       {/* Interactive NJ Counties Map with Comprehensive Coverage */}
       <LazyNJCountiesMap />
 
       {/* Combined YouTube Video and NJREAP Advantage Section */}
-      <section className="py-20 bg-gradient-to-br from-[#4d0a97]/5 to-[#a044e3]/5">
+      <section className="py-12 bg-gradient-to-br from-[#4d0a97]/5 to-[#a044e3]/5">
         <div className="container mx-auto px-4">
+          {/* Showcase Properties Section */}
+          <div ref={showcaseSectionRef} className="mb-12">
+            {shouldLoadShowcaseSection && <LazyShowcaseSection />}
+          </div>
+
           {/* YouTube Video Spotlight */}
           <div ref={videoSectionRef} className="max-w-5xl mx-auto mb-20">
             <div className="text-center mb-12">
@@ -237,41 +244,10 @@ const Index = () => {
             )}
           </div>
 
-          {/* The NJREAP Advantage */}
-          <div className="max-w-6xl mx-auto" aria-labelledby="advantages-heading">
-            <div className="text-center mb-16">
-              <h2 id="advantages-heading" className="text-4xl font-bold text-gray-900 mb-6">
-                The NJREAP Advantage
-              </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                Discover what sets us apart and why thousands of clients trust us
-                with their real estate needs
-              </p>
-            </div>
-
-            <div className="overflow-x-auto md:overflow-x-visible">
-              <div className="flex gap-4 md:grid md:grid-cols-3 md:gap-8 pb-4 md:pb-0">
-                {features.map((feature, index) => (
-                  <Card
-                    key={index}
-                    className="w-72 flex-shrink-0 md:w-auto md:flex-shrink text-center hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-white/80 backdrop-blur-sm border-2 border-gray-100 hover:border-[#4d0a97]/20 h-full"
-                  >
-                    <CardHeader className="pb-4">
-                      <div className="mx-auto w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-[#4d0a97] to-[#a044e3] rounded-2xl flex items-center justify-center mb-4 md:mb-6 shadow-lg">
-                        <feature.icon className="w-8 h-8 md:w-10 md:h-10 text-white" />
-                      </div>
-                      <CardTitle className="text-xl md:text-2xl font-bold text-gray-900">{feature.title}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="pt-0">
-                      <p className="text-gray-600 text-base md:text-lg leading-relaxed">{feature.description}</p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          </div>
+          {/* Our Services */}
         </div>
       </section>
+
 
       {/* Our Services */}
       <section className="py-16 bg-gray-50" aria-labelledby="services-heading">

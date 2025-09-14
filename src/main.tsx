@@ -1,23 +1,28 @@
-
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
 import './index.css'
+import ErrorBoundary from './components/ErrorBoundary'
+import App from './App'
 
-// Defer Microsoft Clarity to avoid blocking main thread
-const initClarity = () => {
-  if (!window.location.pathname.startsWith('/admin')) {
-    import('@microsoft/clarity').then(({ default: Clarity }) => {
-      Clarity.init('s1m5bbn9dt');
-    });
-  }
-};
+console.log('=== MAIN.TSX LOADING ===');
+;(window as any).__moduleLoaded = true;
 
-// Initialize Clarity after page is interactive
-if (document.readyState === 'complete') {
-  setTimeout(initClarity, 500);
+const root = document.getElementById("root");
+console.log('Root element found:', root);
+
+if (root) {
+  console.log('Creating React root...');
+  // Clear the initial placeholder content to avoid lingering "Loading..."
+  root.innerHTML = '';
+  const reactRoot = createRoot(root);
+  reactRoot.render(
+    <React.StrictMode>
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
+    </React.StrictMode>
+  );
+  console.log('React render completed');
 } else {
-  window.addEventListener('load', () => setTimeout(initClarity, 500));
+  console.error('Root element not found!');
 }
-
-createRoot(document.getElementById("root")!).render(<App />);

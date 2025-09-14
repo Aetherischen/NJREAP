@@ -56,6 +56,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [location.pathname]);
 
+  useEffect(() => {
+    console.log('[Layout] route change:', location.pathname);
+  }, [location.pathname]);
+
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (location.pathname === "/") {
@@ -102,6 +106,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     { name: "About", path: "/about" },
     { name: "Services", path: "/services" },
     { name: "Gallery", path: "/gallery" },
+    { name: "Showcase", path: "/showcase" },
     { name: "Blog", path: "/blog" },
     { name: "FAQs", path: "/faqs" },
     { name: "Contact", path: "/contact" },
@@ -110,15 +115,30 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       {/* Google Analytics - Sitewide Tracking */}
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-CVX8RHFWB1"></script>
-      <script dangerouslySetInnerHTML={{
-        __html: `
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-CVX8RHFWB1');
-        `
-      }} />
+      {!location.pathname.startsWith('/admin') && (
+        <>
+          <script async src="https://www.googletagmanager.com/gtag/js?id=G-CVX8RHFWB1"></script>
+          <script dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-CVX8RHFWB1');
+            `
+          }} />
+          
+          {/* Microsoft Clarity */}
+          <script type="text/javascript" dangerouslySetInnerHTML={{
+            __html: `
+              (function(c,l,a,r,i,t,y){
+                  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                  t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+              })(window, document, "clarity", "script", "s1m5bbn9dt");
+            `
+          }} />
+        </>
+      )}
       
       <div className="min-h-screen flex flex-col">
       {/* Header - Hidden on showcase pages */}
@@ -347,6 +367,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                     className="text-gray-600 hover:text-[#4d0a97] transition-colors"
                   >
                     Gallery
+                  </Link>
+                  <Link
+                    to="/showcase"
+                    className="text-gray-600 hover:text-[#4d0a97] transition-colors"
+                  >
+                    Showcase
                   </Link>
                   <Link
                     to="/blog"

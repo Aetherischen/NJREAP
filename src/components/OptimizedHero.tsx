@@ -2,15 +2,14 @@ import { ArrowRight, CheckCircle, Shield, Clock, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
-import PropertySearch from '@/components/PropertySearch';
+import SimpleQuoteForm from '@/components/SimpleQuoteForm';
 import { forwardRef } from 'react';
 
 interface OptimizedHeroProps {
   onGetQuote: () => void;
-  propertySearchRef: React.RefObject<any>;
 }
 
-const OptimizedHero = forwardRef<HTMLElement, OptimizedHeroProps>(({ onGetQuote, propertySearchRef }, ref) => {
+const OptimizedHero = forwardRef<HTMLElement, OptimizedHeroProps>(({ onGetQuote }, ref) => {
   const features = [
     'Licensed & Certified Appraisers',
     'Professional Photography',
@@ -129,10 +128,7 @@ const OptimizedHero = forwardRef<HTMLElement, OptimizedHeroProps>(({ onGetQuote,
           </div>
 
           <div className="flex justify-center">
-            <PropertySearch
-              ref={propertySearchRef}
-              className="bg-white/95 backdrop-blur-sm shadow-2xl"
-            />
+            <SimpleQuoteForm onGetQuote={onGetQuote} />
           </div>
         </div>
       </div>

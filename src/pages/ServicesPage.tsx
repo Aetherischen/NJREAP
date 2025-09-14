@@ -357,6 +357,26 @@ const ServicesPage = () => {
       galleryTab: "video",
       serviceId: "real-estate-videography",
     },
+    {
+      icon: Camera,
+      title: "Property Showcase",
+      description:
+        "Complete online property showcase with professional photography, videos, and agent information. Perfect for realtor marketing and client presentations.",
+      features: [
+        "Professional photos",
+        "Video walkthrough",
+        "Online property page",
+        "Agent information",
+        "Social media ready",
+        "Mobile optimized",
+        "SEO optimized",
+        "Professional branding",
+      ],
+      pricing: servicePricing['property-showcase'] ? `Starting at $${servicePricing['property-showcase']}` : "Starting at $150",
+      galleryTab: null,
+      serviceId: "property-showcase",
+      isShowcase: true,
+    },
   ];
 
   return (
@@ -629,19 +649,32 @@ const ServicesPage = () => {
                     ))}
                   </div>
                   <div className="mt-6">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() =>
-                        handleGalleryNavigation(
-                          service.galleryTab || "photography",
-                        )
-                      }
-                      className="w-full border-[#4d0a97] text-[#4d0a97] hover:bg-[#4d0a97] hover:text-white transition-all"
-                    >
-                      <Eye className="w-4 h-4 mr-2" />
-                      View Gallery
-                    </Button>
+                    {service.isShowcase ? (
+                      <Link to="/showcase">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="w-full border-[#4d0a97] text-[#4d0a97] hover:bg-[#4d0a97] hover:text-white transition-all"
+                        >
+                          <Eye className="w-4 h-4 mr-2" />
+                          View Showcase
+                        </Button>
+                      </Link>
+                    ) : (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() =>
+                          handleGalleryNavigation(
+                            service.galleryTab || "photography",
+                          )
+                        }
+                        className="w-full border-[#4d0a97] text-[#4d0a97] hover:bg-[#4d0a97] hover:text-white transition-all"
+                      >
+                        <Eye className="w-4 h-4 mr-2" />
+                        View Gallery
+                      </Button>
+                    )}
                   </div>
                 </CardContent>
               </Card>

@@ -83,6 +83,12 @@ const ServicePricingManagement = () => {
       icon: Play,
     },
     {
+      service_id: 'property-showcase',
+      service_name: 'Property Showcase',
+      description: 'Complete property marketing showcase for realtors',
+      icon: Camera,
+    },
+    {
       service_id: 'basic-photography',
       service_name: 'Basic Photography Package',
       description: 'Professional Photography + Floor Plans',

@@ -472,7 +472,7 @@ Email: info@njreap.com | Phone: (908) 437-8505
       const contactFormResponse = await resend.emails.send({
         from: "NJREAP Contact Form <noreply@njreap.com>", // Updated to use your verified domain
         to: ["info@njreap.com"],
-        subject: `New Contact Form Submission from ${firstName} ${lastName}`,
+        subject: `[INQUIRY] New Contact Form Submission from ${firstName} ${lastName}`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <h2 style="color: #4d0a97; margin-bottom: 20px;">New Contact Form Submission</h2>

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Plus, Eye, Edit, Trash2, Search, ImageIcon } from 'lucide-react';
+import { Plus, Eye, Edit, Trash2, Search, ImageIcon, BarChart3 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -19,6 +19,7 @@ import {
 import PropertyListingView from './listings/PropertyListingView';
 import PropertyListingEdit from './listings/PropertyListingEdit';
 import CreatePropertyDialog from './listings/CreatePropertyDialog';
+import PropertyAnalytics from '../PropertyAnalytics';
 
 type PropertyListing = {
   id: string;
@@ -43,7 +44,7 @@ type PropertyListing = {
 const ListingsManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedListing, setSelectedListing] = useState<PropertyListing | null>(null);
-  const [viewMode, setViewMode] = useState<'list' | 'view' | 'edit'>('list');
+  const [viewMode, setViewMode] = useState<'list' | 'view' | 'edit' | 'analytics'>('list');
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [deleteListingId, setDeleteListingId] = useState<string | null>(null);
   
@@ -116,6 +117,11 @@ const ListingsManagement = () => {
     setViewMode('edit');
   };
 
+  const handleAnalytics = (listing: PropertyListing) => {
+    setSelectedListing(listing);
+    setViewMode('analytics');
+  };
+
   const handleBackToList = () => {
     setSelectedListing(null);
     setViewMode('list');
@@ -168,6 +174,16 @@ const ListingsManagement = () => {
           }}
         />
       </div>
+    );
+  }
+
+  if (viewMode === 'analytics' && selectedListing) {
+    return (
+      <PropertyAnalytics
+        propertyId={selectedListing.id}
+        propertyAddress={selectedListing.property_address}
+        onBack={handleBackToList}
+      />
     );
   }
 
@@ -244,6 +260,11 @@ const ListingsManagement = () => {
                       <Button variant="outline" size="sm" onClick={() => handleEdit(listing)}>
                         <Edit className="h-4 w-4" />
                       </Button>
+                      {listing.is_public && (
+                        <Button variant="outline" size="sm" onClick={() => handleAnalytics(listing)}>
+                          <BarChart3 className="h-4 w-4" />
+                        </Button>
+                      )}
                       <Button variant="outline" size="sm" onClick={() => handleDelete(listing.id)}>
                         <Trash2 className="h-4 w-4" />
                       </Button>

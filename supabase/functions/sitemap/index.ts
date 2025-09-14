@@ -134,6 +134,86 @@ Deno.serve(async (req) => {
     <lastmod>${currentDate}</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
+  </url>
+  
+  <!-- County Pages -->
+  <url>
+    <loc>https://njreap.com/counties/hunterdon</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://njreap.com/counties/bergen</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://njreap.com/counties/essex</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://njreap.com/counties/hudson</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://njreap.com/counties/mercer</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://njreap.com/counties/middlesex</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://njreap.com/counties/monmouth</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://njreap.com/counties/morris</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://njreap.com/counties/passaic</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://njreap.com/counties/somerset</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://njreap.com/counties/sussex</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://njreap.com/counties/union</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://njreap.com/counties/warren</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>`
 
     // Add public property showcase pages dynamically

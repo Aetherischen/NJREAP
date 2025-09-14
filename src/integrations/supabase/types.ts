@@ -469,6 +469,7 @@ export type Database = {
           matterport_urls: string[] | null
           photos_urls: string[] | null
           primary_photo_url: string | null
+          primary_photos_urls: string[] | null
           property_address: string
           property_city: string | null
           property_state: string | null
@@ -515,6 +516,7 @@ export type Database = {
           matterport_urls?: string[] | null
           photos_urls?: string[] | null
           primary_photo_url?: string | null
+          primary_photos_urls?: string[] | null
           property_address: string
           property_city?: string | null
           property_state?: string | null
@@ -561,6 +563,7 @@ export type Database = {
           matterport_urls?: string[] | null
           photos_urls?: string[] | null
           primary_photo_url?: string | null
+          primary_photos_urls?: string[] | null
           property_address?: string
           property_city?: string | null
           property_state?: string | null
@@ -653,6 +656,15 @@ export type Database = {
         }
         Returns: boolean
       }
+      get_agent_contact_for_property: {
+        Args: { property_id: string }
+        Returns: {
+          agent_email: string
+          agent_name: string
+          agent_phone: string
+          brokerage_name: string
+        }[]
+      }
       get_current_user_role: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -660,6 +672,41 @@ export type Database = {
       get_current_user_role_secure: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      get_property_with_contact: {
+        Args: { property_identifier: string }
+        Returns: {
+          acreage: number
+          aerial_urls: string[]
+          agent_email: string
+          agent_headshot_url: string
+          agent_name: string
+          agent_phone: string
+          bathrooms: number
+          bedrooms: number
+          brokerage_logo_url: string
+          brokerage_name: string
+          created_at: string
+          floorplan_urls: string[]
+          has_aerial: boolean
+          has_floorplans: boolean
+          has_matterport: boolean
+          has_photos: boolean
+          has_videos: boolean
+          id: string
+          matterport_urls: string[]
+          photos_urls: string[]
+          primary_photo_url: string
+          property_address: string
+          property_city: string
+          property_state: string
+          property_zip: string
+          slug: string
+          sqft: number
+          updated_at: string
+          video_urls: string[]
+          year_built: number
+        }[]
       }
       sanitize_input_text: {
         Args: { input_text: string }

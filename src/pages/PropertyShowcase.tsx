@@ -78,16 +78,28 @@ const PropertyShowcase = () => {
       if (!slug) return;
 
       try {
+        // Use the secure function to get property with contact details
+        // This is appropriate for individual property viewing where contact info is needed
         const { data, error } = await supabase
-          .from('property_listings')
-          .select('*')
-          .eq('slug', slug)
-          .single();
+          .rpc('get_property_with_contact', { property_identifier: slug });
 
         if (error) throw error;
 
-        if (data) {
-          setProperty(data);
+        if (data && data.length > 0) {
+          // Add missing fields that aren't returned by the function but expected by the type
+          const propertyData = {
+            ...data[0],
+            is_public: true, // We know it's public since the function only returns public properties
+            primary_photos_urls: data[0].photos_urls || [],
+            // Ensure all optional social media fields are included
+            agent_facebook: null,
+            agent_instagram: null,
+            agent_x: null,
+            agent_linkedin: null,
+            agent_youtube: null,
+            agent_pinterest: null,
+          } as PropertyListing;
+          setProperty(propertyData);
         } else {
           toast({
             title: "Property not found",
@@ -109,6 +121,59 @@ const PropertyShowcase = () => {
 
     fetchProperty();
   }, [slug, toast]);
+
+  // Hide tawk.to widget on showcase pages
+  useEffect(() => {
+    if (typeof window !== 'undefined' && (window as any).Tawk_API) {
+      (window as any).Tawk_API.hideWidget();
+    }
+
+    // Show it again when leaving the page
+    return () => {
+      if (typeof window !== 'undefined' && (window as any).Tawk_API) {
+        (window as any).Tawk_API.showWidget();
+      }
+    };
+  }, []);
+
+  // Track individual showcase page analytics
+  useEffect(() => {
+    if (property && typeof window !== 'undefined' && (window as any).gtag) {
+      // Track page view with property-specific data
+      (window as any).gtag('config', 'G-CVX8RHFWB1', {
+        page_title: `Property Showcase: ${property.property_address}`,
+        page_location: window.location.href,
+        custom_map: {
+          property_id: property.id,
+          property_slug: property.slug,
+          agent_name: property.agent_name,
+          property_address: property.property_address
+        }
+      });
+
+      // Track showcase page view event
+      (window as any).gtag('event', 'showcase_page_view', {
+        property_id: property.id,
+        property_slug: property.slug,
+        agent_name: property.agent_name,
+        property_address: property.property_address
+      });
+
+      // Track to Supabase analytics
+      supabase.from('analytics_events').insert({
+        event_type: 'showcase_page_view',
+        page_path: `/showcase/${slug}`,
+        event_data: {
+          property_id: property.id,
+          property_slug: property.slug,
+          agent_name: property.agent_name,
+          property_address: property.property_address
+        }
+      }).then(({ error }) => {
+        if (error) console.error('Error tracking showcase view:', error);
+      });
+    }
+  }, [property, slug]);
 
   // Cycle through hero images
   useEffect(() => {
@@ -355,6 +420,31 @@ const PropertyShowcase = () => {
                       <a 
                         href={`tel:${property.agent_phone}`}
                         className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors"
+                        onClick={() => {
+                          // Track realtor phone click
+                          if (typeof window !== 'undefined' && (window as any).gtag) {
+                            (window as any).gtag('event', 'realtor_contact_phone', {
+                              property_id: property.id,
+                              property_slug: property.slug,
+                              agent_name: property.agent_name,
+                              contact_method: 'phone'
+                            });
+                          }
+                          
+                          // Track to Supabase analytics
+                          supabase.from('analytics_events').insert({
+                            event_type: 'realtor_contact_phone',
+                            page_path: `/showcase/${property.slug}`,
+                            event_data: {
+                              property_id: property.id,
+                              property_slug: property.slug,
+                              agent_name: property.agent_name,
+                              contact_method: 'phone'
+                            }
+                          }).then(({ error }) => {
+                            if (error) console.error('Error tracking phone click:', error);
+                          });
+                        }}
                       >
                         <Phone className="w-4 h-4" />
                         {property.agent_phone}
@@ -364,6 +454,31 @@ const PropertyShowcase = () => {
                       <a 
                         href={`mailto:${property.agent_email}`}
                         className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors"
+                        onClick={() => {
+                          // Track realtor email click
+                          if (typeof window !== 'undefined' && (window as any).gtag) {
+                            (window as any).gtag('event', 'realtor_contact_email', {
+                              property_id: property.id,
+                              property_slug: property.slug,
+                              agent_name: property.agent_name,
+                              contact_method: 'email'
+                            });
+                          }
+                          
+                          // Track to Supabase analytics
+                          supabase.from('analytics_events').insert({
+                            event_type: 'realtor_contact_email',
+                            page_path: `/showcase/${property.slug}`,
+                            event_data: {
+                              property_id: property.id,
+                              property_slug: property.slug,
+                              agent_name: property.agent_name,
+                              contact_method: 'email'
+                            }
+                          }).then(({ error }) => {
+                            if (error) console.error('Error tracking email click:', error);
+                          });
+                        }}
                       >
                         <Mail className="w-4 h-4" />
                         {property.agent_email}
@@ -417,6 +532,31 @@ const PropertyShowcase = () => {
                   <a 
                     href={`tel:${property.agent_phone}`}
                     className="p-2 bg-primary text-primary-foreground rounded-full hover:bg-primary/80 transition-colors"
+                    onClick={() => {
+                      // Track realtor phone click
+                      if (typeof window !== 'undefined' && (window as any).gtag) {
+                        (window as any).gtag('event', 'realtor_contact_phone', {
+                          property_id: property.id,
+                          property_slug: property.slug,
+                          agent_name: property.agent_name,
+                          contact_method: 'phone'
+                        });
+                      }
+                      
+                      // Track to Supabase analytics
+                      supabase.from('analytics_events').insert({
+                        event_type: 'realtor_contact_phone',
+                        page_path: `/showcase/${property.slug}`,
+                        event_data: {
+                          property_id: property.id,
+                          property_slug: property.slug,
+                          agent_name: property.agent_name,
+                          contact_method: 'phone'
+                        }
+                      }).then(({ error }) => {
+                        if (error) console.error('Error tracking phone click:', error);
+                      });
+                    }}
                   >
                     <Phone className="w-4 h-4" />
                   </a>
@@ -425,6 +565,31 @@ const PropertyShowcase = () => {
                   <a 
                     href={`mailto:${property.agent_email}`}
                     className="p-2 bg-primary text-primary-foreground rounded-full hover:bg-primary/80 transition-colors"
+                    onClick={() => {
+                      // Track realtor email click
+                      if (typeof window !== 'undefined' && (window as any).gtag) {
+                        (window as any).gtag('event', 'realtor_contact_email', {
+                          property_id: property.id,
+                          property_slug: property.slug,
+                          agent_name: property.agent_name,
+                          contact_method: 'email'
+                        });
+                      }
+                      
+                      // Track to Supabase analytics
+                      supabase.from('analytics_events').insert({
+                        event_type: 'realtor_contact_email',
+                        page_path: `/showcase/${property.slug}`,
+                        event_data: {
+                          property_id: property.id,
+                          property_slug: property.slug,
+                          agent_name: property.agent_name,
+                          contact_method: 'email'
+                        }
+                      }).then(({ error }) => {
+                        if (error) console.error('Error tracking email click:', error);
+                      });
+                    }}
                   >
                     <Mail className="w-4 h-4" />
                   </a>
@@ -502,7 +667,7 @@ const PropertyShowcase = () => {
               {/* Scroll Indicator */}
               <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30 animate-bounce">
                 <div className="bg-white/20 backdrop-blur-md rounded-full p-3 border border-white/30">
-                  <ChevronDown className="w-6 h-6 text-white" />
+                  <MousePointer2 className="w-6 h-6 text-white" />
                 </div>
                 <p className="text-white text-sm mt-2 text-center font-medium drop-shadow-lg">
                   Scroll to explore
@@ -630,7 +795,7 @@ const PropertyShowcase = () => {
                         <div key={`image-${index}`} className="relative group">
                           <div 
                             className="aspect-[4/3] w-full overflow-hidden rounded-xl bg-muted shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer"
-                            onClick={() => setSelectedPhoto({ url, alt: `Floor plan image ${index + 1}` })}
+                            onClick={() => setSelectedPhoto({ url, alt: `Floor plan image ${index + 1}`, index: -1 })}
                           >
                             <img 
                               src={url} 
@@ -781,7 +946,7 @@ const PropertyShowcase = () => {
                       <div 
                         key={index + 1}
                         className="relative w-80 h-48 cursor-pointer group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 flex-shrink-0"
-                        onClick={() => setSelectedPhoto({ url, alt: `Aerial view ${index + 2}` })}
+                        onClick={() => setSelectedPhoto({ url, alt: `Aerial view ${index + 2}`, index: -1 })}
                       >
                         <img 
                           src={url} 
@@ -835,7 +1000,7 @@ const PropertyShowcase = () => {
   }
 
   return (
-    <>
+    <Layout>
       <div className="min-h-screen bg-background">
         {renderMediaSection()}
 
@@ -920,10 +1085,7 @@ const PropertyShowcase = () => {
           />
         )}
       </div>
-      
-      {/* Add Footer */}
-      <ShowcaseFooter />
-    </>
+    </Layout>
   );
 };
 

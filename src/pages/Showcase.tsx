@@ -47,9 +47,29 @@ const Showcase = () => {
   const { data: properties, isLoading } = useQuery({
     queryKey: ['public-properties'],
     queryFn: async () => {
+      // Use safer query that excludes sensitive contact data for listing views
       const { data, error } = await supabase
         .from('property_listings')
-        .select('*')
+        .select(`
+          id,
+          property_address,
+          agent_name,
+          brokerage_name,
+          primary_photo_url,
+          slug,
+          bedrooms,
+          bathrooms,
+          sqft,
+          year_built,
+          property_city,
+          property_state,
+          has_photos,
+          has_videos,
+          has_floorplans,
+          has_matterport,
+          has_aerial,
+          created_at
+        `)
         .eq('is_public', true)
         .order('created_at', { ascending: false });
 
@@ -82,22 +102,59 @@ const Showcase = () => {
 
   return (
     <Layout>
-      <main className="min-h-screen bg-gradient-to-b from-background to-muted/20">
-        {/* Header Section */}
-        <section className="relative py-20 px-4">
-          <div className="container mx-auto max-w-6xl text-center">
-            <div className="mb-6">
-              <Building className="h-16 w-16 text-primary mx-auto mb-4" />
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent mb-6">
+      {/* Hero Section */}
+      <section className="relative min-h-[400px] flex items-center overflow-hidden">
+        {/* Background Image - hidden on mobile */}
+        <div
+          className="hidden sm:block absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url('/images/pages/bg-services.webp')`,
+          }}
+        ></div>
+        {/* Mobile-only full gradient background */}
+        <div
+          className="sm:hidden absolute inset-0"
+          style={{
+            background: `linear-gradient(to right,
+              rgba(77, 10, 151, 1.0) 0%,
+              rgba(160, 68, 227, 1.0) 100%)`,
+          }}
+        />
+
+        {/* Gradient Overlay - 100% opacity dropping to 0% at 75% width */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `linear-gradient(to right,
+              rgba(77, 10, 151, 1.0) 0%,
+              rgba(160, 68, 227, 1.0) 25%,
+              rgba(160, 68, 227, 0.8) 50%,
+              rgba(160, 68, 227, 0.4) 65%,
+              rgba(160, 68, 227, 0.1) 70%,
+              transparent 75%)`,
+          }}
+        ></div>
+
+        <div className="relative z-10 container mx-auto px-4 py-8 sm:py-16">
+          <div className="max-w-4xl mx-auto text-center text-white">
+            <Badge
+              variant="outline"
+              className="text-white border-white/30 mb-2 sm:mb-4"
+            >
               Property Showcase
+            </Badge>
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-6">
+              Professional Real Estate Media Portfolio
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
+            <p className="text-lg sm:text-xl text-gray-100 leading-relaxed">
               Explore our collection of professionally photographed and marketed properties. 
               Each property showcases our comprehensive real estate media services.
             </p>
           </div>
-        </section>
+        </div>
+      </section>
+
+      <main className="min-h-screen bg-gradient-to-b from-background to-muted/20">
 
         {/* Properties Grid */}
         <section className="py-12 px-4">
@@ -218,7 +275,7 @@ const Showcase = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 px-4 bg-gradient-to-r from-primary/5 to-primary/10">
+        <section className="py-8 px-4 bg-gradient-to-r from-primary/5 to-primary/10">
           <div className="container mx-auto max-w-4xl text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Ready to Showcase Your Property?

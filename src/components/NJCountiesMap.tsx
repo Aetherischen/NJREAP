@@ -2,21 +2,22 @@
 import { useState } from "react";
 import { clsx } from "clsx";
 import { MapPin, CheckCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const counties = [
-  "Bergen",
-  "Essex",
-  "Hudson",
-  "Hunterdon",
-  "Mercer",
-  "Middlesex",
-  "Monmouth",
-  "Morris",
-  "Passaic",
-  "Somerset",
-  "Sussex",
-  "Union",
-  "Warren",
+  { name: "Bergen", slug: "bergen" },
+  { name: "Essex", slug: "essex" },
+  { name: "Hudson", slug: "hudson" },
+  { name: "Hunterdon", slug: "hunterdon" },
+  { name: "Mercer", slug: "mercer" },
+  { name: "Middlesex", slug: "middlesex" },
+  { name: "Monmouth", slug: "monmouth" },
+  { name: "Morris", slug: "morris" },
+  { name: "Passaic", slug: "passaic" },
+  { name: "Somerset", slug: "somerset" },
+  { name: "Sussex", slug: "sussex" },
+  { name: "Union", slug: "union" },
+  { name: "Warren", slug: "warren" },
 ];
 
 const NJCountiesMap = () => {
@@ -60,14 +61,15 @@ const NJCountiesMap = () => {
             {/* Counties Grid */}
             <div className="grid grid-cols-3 sm:grid-cols-2 gap-2 sm:gap-3">
               {counties.map((county) => (
-                <div
-                  key={county}
-                  onMouseEnter={() => setHoveredCounty(county)}
+                <Link
+                  key={county.slug}
+                  to={`/${county.slug}`}
+                  onMouseEnter={() => setHoveredCounty(county.name)}
                   onMouseLeave={() => setHoveredCounty(null)}
                   className={clsx(
                     "flex flex-col sm:flex-row items-center p-2 sm:p-3 rounded-lg transition-all duration-200 cursor-pointer group text-center sm:text-left",
                     "bg-white border border-gray-200 hover:border-[#4d0a97] hover:shadow-md",
-                    hoveredCounty === county &&
+                    hoveredCounty === county.name &&
                       "border-[#4d0a97] shadow-md bg-[#4d0a97]/5",
                   )}
                 >
@@ -75,7 +77,7 @@ const NJCountiesMap = () => {
                     className={clsx(
                       "flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg mb-1 sm:mb-0 sm:mr-3 transition-colors duration-200",
                       "bg-gray-100 group-hover:bg-[#4d0a97] group-hover:text-white",
-                      hoveredCounty === county &&
+                      hoveredCounty === county.name &&
                         "bg-[#4d0a97] text-white",
                     )}
                   >
@@ -86,14 +88,14 @@ const NJCountiesMap = () => {
                       className={clsx(
                         "font-semibold text-xs sm:text-sm transition-colors duration-200",
                         "text-gray-900 group-hover:text-[#4d0a97]",
-                        hoveredCounty === county && "text-[#4d0a97]",
+                        hoveredCounty === county.name && "text-[#4d0a97]",
                       )}
                     >
-                      {county}
+                      {county.name}
                       <span className="hidden sm:inline"> County</span>
                     </h4>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
 

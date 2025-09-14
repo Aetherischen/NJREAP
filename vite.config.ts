@@ -5,6 +5,7 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  base: './',
   server: {
     host: "::",
     port: 8080,
@@ -20,27 +21,13 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    // Optimize bundle splitting for better caching
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          // Vendor chunks
-          'react-vendor': ['react', 'react-dom'],
-          'router-vendor': ['react-router-dom'],
-          'ui-vendor': ['lucide-react', '@radix-ui/react-dialog', '@radix-ui/react-slot'],
-          'supabase-vendor': ['@supabase/supabase-js'],
-          'query-vendor': ['@tanstack/react-query'],
-        },
-      },
-    },
-    // Increase chunk size warning limit for performance chunks
+    target: 'esnext',
     chunkSizeWarningLimit: 1000,
-    // Enable minification for better performance
     minify: 'esbuild',
-    // Generate sourcemaps for debugging
     sourcemap: mode === 'development',
+    cssCodeSplit: true
   },
-  // Optimize dependencies
+  // Optimize dependencies for better performance
   optimizeDeps: {
     include: [
       'react',
@@ -48,7 +35,16 @@ export default defineConfig(({ mode }) => ({
       'react-router-dom',
       'lucide-react',
       '@supabase/supabase-js',
-      '@tanstack/react-query'
+      '@tanstack/react-query',
+      'recharts',
+      'react-hook-form',
+      'zod',
+      'class-variance-authority',
+      'clsx',
+      'tailwind-merge'
     ],
+    exclude: [
+      '@microsoft/clarity' // Exclude from pre-bundling since it's loaded dynamically
+    ]
   },
 }));

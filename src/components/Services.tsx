@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
 
-const Services = () => {
+const Services = ({ hideReadyToStart = false }: { hideReadyToStart?: boolean }) => {
   const services = [
     {
       icon: FileText,
@@ -265,22 +265,24 @@ const Services = () => {
         </div>
 
         {/* CTA Section */}
-        <div className="text-center bg-gradient-to-r from-[#4d0a97] to-[#a044e3] rounded-2xl p-12 text-white">
-          <h3 className="text-3xl font-bold mb-4">
-            Ready to Get Started?
-          </h3>
-          <p className="text-xl mb-8 text-white/90">
-            Get an instant quote for your property and schedule your services today
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className="bg-white text-[#4d0a97] hover:bg-gray-100 text-lg px-8 py-3 h-auto">
-              Get Instant Quote
-            </Button>
-            <Button variant="outline" className="border-white text-white hover:bg-white hover:text-[#4d0a97] text-lg px-8 py-3 h-auto">
-              Call (555) 123-4567
-            </Button>
+        {!hideReadyToStart && (
+          <div className="text-center bg-gradient-to-r from-[#4d0a97] to-[#a044e3] rounded-2xl p-12 text-white">
+            <h3 className="text-3xl font-bold mb-4">
+              Ready to Get Started?
+            </h3>
+            <p className="text-xl mb-8 text-white/90">
+              Get an instant quote for your property and schedule your services today
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button className="bg-white text-[#4d0a97] hover:bg-gray-100 text-lg px-8 py-3 h-auto">
+                Get Instant Quote
+              </Button>
+              <Button variant="outline" className="border-white text-white hover:bg-white hover:text-[#4d0a97] text-lg px-8 py-3 h-auto">
+                Call (555) 123-4567
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

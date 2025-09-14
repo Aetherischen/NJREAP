@@ -33,6 +33,7 @@ type PropertyListing = {
   floorplan_urls?: string[];
   matterport_urls?: string[];
   aerial_urls?: string[];
+  primary_photos_urls?: string[];
 };
 
 interface PropertyListingEditProps {
@@ -73,6 +74,7 @@ const PropertyListingEdit: React.FC<PropertyListingEditProps> = ({ listing, onSu
     tax_assessment: (listing as any)?.tax_assessment || '',
     tax_assessment_year: (listing as any)?.tax_assessment_year || '',
     primary_photo_url: (listing as any)?.primary_photo_url || '',
+    primary_photos_urls: (listing as any)?.primary_photos_urls || [],
     is_public: listing?.is_public || false,
     slug: listing?.slug || '',
     photos_urls: safeArrayInit(listing?.photos_urls),
@@ -403,6 +405,7 @@ const PropertyListingEdit: React.FC<PropertyListingEditProps> = ({ listing, onSu
         tax_assessment: formData.tax_assessment ? parseFloat(formData.tax_assessment) : null,
         tax_assessment_year: formData.tax_assessment_year ? parseInt(formData.tax_assessment_year) : null,
         primary_photo_url: formData.primary_photo_url?.trim() || null,
+        primary_photos_urls: formData.primary_photos_urls || [],
         is_public: formData.is_public,
         slug: formData.slug?.trim() || null,
         photos_urls: formData.photos_urls || [],
@@ -864,32 +867,64 @@ const PropertyListingEdit: React.FC<PropertyListingEditProps> = ({ listing, onSu
           <CardDescription>Upload photos, videos, documents, and other media for this property</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Primary Photo Selection */}
+          {/* Primary Photo Selection - Enhanced for Multiple Photos */}
           {formData.photos_urls.length > 0 && (
             <div>
-              <Label className="text-base font-medium">Primary Photo</Label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
-                {formData.photos_urls.map((url, index) => (
-                  <div 
-                    key={index} 
-                    className={`relative cursor-pointer border-2 rounded-lg transition-all ${
-                      formData.primary_photo_url === url ? 'border-primary ring-2 ring-primary/20' : 'border-transparent hover:border-muted-foreground'
-                    }`}
-                    onClick={() => setFormData(prev => ({ ...prev, primary_photo_url: url }))}
-                  >
-                    <img
-                      src={url}
-                      alt={`Photo ${index + 1}`}
-                      className="w-full h-24 object-cover rounded-lg"
-                    />
-                    {formData.primary_photo_url === url && (
-                      <div className="absolute inset-0 bg-primary/20 rounded-lg flex items-center justify-center">
-                        <span className="bg-primary text-primary-foreground px-2 py-1 rounded text-xs font-medium">PRIMARY</span>
-                      </div>
-                    )}
-                  </div>
-                ))}
+              <Label className="text-base font-medium">Primary Photos (Max 5)</Label>
+              <p className="text-sm text-muted-foreground mb-3">
+                Select up to 5 photos to cycle through on the main showcase. First selected becomes the default.
+              </p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {formData.photos_urls.map((url, index) => {
+                  const isSelected = formData.primary_photos_urls.includes(url);
+                  const selectedIndex = formData.primary_photos_urls.indexOf(url);
+                  
+                  return (
+                    <div 
+                      key={index} 
+                      className={`relative cursor-pointer border-2 rounded-lg transition-all ${
+                        isSelected ? 'border-primary ring-2 ring-primary/20' : 'border-transparent hover:border-muted-foreground'
+                      }`}
+                      onClick={() => {
+                        const currentSelected = [...formData.primary_photos_urls];
+                        if (isSelected) {
+                          // Remove from selection
+                          const newSelected = currentSelected.filter(photoUrl => photoUrl !== url);
+                          setFormData(prev => ({ ...prev, primary_photos_urls: newSelected }));
+                        } else if (currentSelected.length < 5) {
+                          // Add to selection (max 5)
+                          setFormData(prev => ({ ...prev, primary_photos_urls: [...currentSelected, url] }));
+                        }
+                      }}
+                    >
+                      <img
+                        src={url}
+                        alt={`Photo ${index + 1}`}
+                        className="w-full h-24 object-cover rounded-lg"
+                      />
+                      {isSelected && (
+                        <div className="absolute inset-0 bg-primary/20 rounded-lg flex items-center justify-center">
+                          <div className="bg-primary text-primary-foreground px-2 py-1 rounded text-xs font-medium flex items-center gap-1">
+                            PRIMARY {selectedIndex + 1}
+                          </div>
+                        </div>
+                      )}
+                      {formData.primary_photos_urls.length >= 5 && !isSelected && (
+                        <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
+                          <span className="text-white text-xs font-medium">MAX REACHED</span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
+              {formData.primary_photos_urls.length > 0 && (
+                <div className="mt-3 p-3 bg-muted/50 rounded-lg">
+                  <p className="text-sm text-muted-foreground">
+                    <strong>Selected {formData.primary_photos_urls.length}/5:</strong> These photos will cycle automatically on the showcase page.
+                  </p>
+                </div>
+              )}
             </div>
           )}
           {/* Photos */}
