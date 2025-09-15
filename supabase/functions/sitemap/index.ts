@@ -3,7 +3,6 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.50.0'
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  'Content-Type': 'application/xml',
 }
 
 interface PropertyListing {
@@ -53,219 +52,105 @@ Deno.serve(async (req) => {
     // Generate current date for lastmod
     const currentDate = new Date().toISOString().split('T')[0]
 
-    // Start building the sitemap XML
-    let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Home Page -->
-  <url>
-    <loc>https://njreap.com/</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-  
-  <!-- About Page -->
-  <url>
-    <loc>https://njreap.com/about</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <!-- Services Page -->
-  <url>
-    <loc>https://njreap.com/services</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  
-  <!-- Gallery Page -->
-  <url>
-    <loc>https://njreap.com/gallery</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <!-- Showcase Page -->
-  <url>
-    <loc>https://njreap.com/showcase</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <!-- Blog Main Page -->
-  <url>
-    <loc>https://njreap.com/blog</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <!-- FAQs Page -->
-  <url>
-    <loc>https://njreap.com/faqs</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <!-- Contact Page -->
-  <url>
-    <loc>https://njreap.com/contact</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <!-- Privacy Policy -->
-  <url>
-    <loc>https://njreap.com/privacy</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  
-  <!-- Terms of Service -->
-  <url>
-    <loc>https://njreap.com/terms</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  
-  <!-- County Pages -->
-  <url>
-    <loc>https://njreap.com/counties/hunterdon</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://njreap.com/counties/bergen</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://njreap.com/counties/essex</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://njreap.com/counties/hudson</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://njreap.com/counties/mercer</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://njreap.com/counties/middlesex</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://njreap.com/counties/monmouth</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://njreap.com/counties/morris</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://njreap.com/counties/passaic</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://njreap.com/counties/somerset</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://njreap.com/counties/sussex</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://njreap.com/counties/union</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://njreap.com/counties/warren</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>`
+    // Start building the sitemap XML - construct as array for better control
+    const sitemapLines = []
+    sitemapLines.push('<?xml version="1.0" encoding="UTF-8"?>')
+    sitemapLines.push('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
+    
+    // Add static pages
+    const staticPages = [
+      { url: 'https://njreap.com/', changefreq: 'weekly', priority: '1.0' },
+      { url: 'https://njreap.com/about', changefreq: 'monthly', priority: '0.8' },
+      { url: 'https://njreap.com/services', changefreq: 'monthly', priority: '0.9' },
+      { url: 'https://njreap.com/gallery', changefreq: 'weekly', priority: '0.7' },
+      { url: 'https://njreap.com/showcase', changefreq: 'weekly', priority: '0.8' },
+      { url: 'https://njreap.com/blog', changefreq: 'daily', priority: '0.8' },
+      { url: 'https://njreap.com/faqs', changefreq: 'monthly', priority: '0.6' },
+      { url: 'https://njreap.com/contact', changefreq: 'monthly', priority: '0.7' },
+      { url: 'https://njreap.com/privacy', changefreq: 'yearly', priority: '0.3' },
+      { url: 'https://njreap.com/terms', changefreq: 'yearly', priority: '0.3' }
+    ]
+    
+    staticPages.forEach(page => {
+      sitemapLines.push('  <url>')
+      sitemapLines.push(`    <loc>${page.url}</loc>`)
+      sitemapLines.push(`    <lastmod>${currentDate}</lastmod>`)
+      sitemapLines.push(`    <changefreq>${page.changefreq}</changefreq>`)
+      sitemapLines.push(`    <priority>${page.priority}</priority>`)
+      sitemapLines.push('  </url>')
+    })
+    
+    // Add county pages
+    const countyPages = [
+      'hunterdon', 'bergen', 'essex', 'hudson', 'mercer', 'middlesex', 
+      'monmouth', 'morris', 'passaic', 'somerset', 'sussex', 'union', 'warren'
+    ]
+    
+    countyPages.forEach(county => {
+      sitemapLines.push('  <url>')
+      sitemapLines.push(`    <loc>https://njreap.com/counties/${county}</loc>`)
+      sitemapLines.push(`    <lastmod>${currentDate}</lastmod>`)
+      sitemapLines.push('    <changefreq>monthly</changefreq>')
+      sitemapLines.push('    <priority>0.8</priority>')
+      sitemapLines.push('  </url>')
+    })
 
     // Add public property showcase pages dynamically
     if (properties && properties.length > 0) {
-      sitemap += '\n  \n  <!-- Public Property Showcase Pages -->'
-      
       for (const property of properties as PropertyListing[]) {
         const lastmod = new Date(property.updated_at).toISOString().split('T')[0]
-        sitemap += `
-  <url>
-    <loc>https://njreap.com/showcase/${property.slug}</loc>
-    <lastmod>${lastmod}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>`
+        sitemapLines.push('  <url>')
+        sitemapLines.push(`    <loc>https://njreap.com/showcase/${property.slug}</loc>`)
+        sitemapLines.push(`    <lastmod>${lastmod}</lastmod>`)
+        sitemapLines.push('    <changefreq>monthly</changefreq>')
+        sitemapLines.push('    <priority>0.7</priority>')
+        sitemapLines.push('  </url>')
       }
     }
 
     // Add published blog posts dynamically
     if (blogPosts && blogPosts.length > 0) {
-      sitemap += '\n  \n  <!-- Blog Posts -->'
-      
       for (const post of blogPosts as BlogPost[]) {
         const lastmod = new Date(post.updated_at).toISOString().split('T')[0]
-        sitemap += `
-  <url>
-    <loc>https://njreap.com/blog/${post.slug}</loc>
-    <lastmod>${lastmod}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>`
+        sitemapLines.push('  <url>')
+        sitemapLines.push(`    <loc>https://njreap.com/blog/${post.slug}</loc>`)
+        sitemapLines.push(`    <lastmod>${lastmod}</lastmod>`)
+        sitemapLines.push('    <changefreq>monthly</changefreq>')
+        sitemapLines.push('    <priority>0.6</priority>')
+        sitemapLines.push('  </url>')
       }
     }
 
     // Close the sitemap
-    sitemap += '\n</urlset>'
+    sitemapLines.push('</urlset>')
 
-    return new Response(sitemap, {
-      headers: corsHeaders,
+    // Join all lines and ensure proper XML formatting
+    const sitemap = sitemapLines.join('\n')
+    
+    // Remove any BOM characters
+    const cleanSitemap = sitemap.replace(/^\uFEFF/, '')
+
+    return new Response(cleanSitemap, {
       status: 200,
+      headers: {
+        ...corsHeaders,
+        'Content-Type': 'application/xml; charset=utf-8',
+        'Cache-Control': 'public, max-age=3600', // Cache for 1 hour
+      }
     })
 
   } catch (error) {
     console.error('Error generating sitemap:', error)
     
-    return new Response(
-      `<?xml version="1.0" encoding="UTF-8"?>
-<error>Unable to generate sitemap</error>`,
-      {
-        headers: corsHeaders,
-        status: 500,
+    const errorXml = `<?xml version="1.0" encoding="UTF-8"?>
+<error>Unable to generate sitemap</error>`
+
+    return new Response(errorXml.trimStart(), {
+      status: 500,
+      headers: {
+        ...corsHeaders,
+        'Content-Type': 'application/xml; charset=utf-8',
       }
-    )
+    })
   }
 })
