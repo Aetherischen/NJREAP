@@ -60,9 +60,6 @@ enable_signup = true
 double_confirm_changes = true
 enable_confirmations = false
 
-[functions.sitemap]
-verify_jwt = false
-
 [functions.njpr-property-images]
 verify_jwt = false
 

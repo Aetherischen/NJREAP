@@ -22,10 +22,12 @@ import {
   RefreshCw,
   Plus,
   Trash2,
-  Send
+  Send,
+  Globe
 } from 'lucide-react';
 import ServicePricingManagement from './ServicePricingManagement';
 import DiscountManagement from './DiscountManagement';
+import SitemapManagement from './SitemapManagement';
 
 interface StorageStats {
   used: number;
@@ -437,6 +439,10 @@ const AdminSettings = () => {
                 <Bell className="w-4 h-4" />
                 <span>Notifications</span>
               </TabsTrigger>
+              <TabsTrigger value="sitemap" className="flex items-center space-x-2">
+                <Globe className="w-4 h-4" />
+                <span>Sitemap</span>
+              </TabsTrigger>
               <TabsTrigger value="system" className="flex items-center space-x-2">
                 <Shield className="w-4 h-4" />
                 <span>System</span>
@@ -695,6 +701,10 @@ const AdminSettings = () => {
                   </Button>
                 </div>
               </div>
+            </TabsContent>
+
+            <TabsContent value="sitemap" className="mt-6">
+              <SitemapManagement />
             </TabsContent>
 
             <TabsContent value="system" className="mt-6">
